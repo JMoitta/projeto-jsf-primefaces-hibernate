@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Teste</title>
+</h:head>
+<h:body>
+	<h:form id="formUsuario">
+		<h:panelGroup>
+			<p:commandButton value="Novo Usuario" update="dlgUsuario"
+				oncomplete="PF('dlgUsuario').show();" action="#{usuarioView.limpaUsuario}"/>
+			<p:dialog  id="dlgUsuario" header="Modal Usuario" width="800"
+				widgetVar="dlgUsuario" modal="true">
+				<h:panelGrid columns="2">
+
+					<p:outputLabel id="lblNome" for="inpNome" value="Nome" />
+					<p:inputText id="inpNome"
+						value="#{usuarioView.usuarioSelecionado.nome}" maxlength="255" />
+
+					<p:outputLabel id="lblMatricula" for="inpMatricula"
+						value="Matricula" />
+					<p:inputText id="inpMatricula"
+						value="#{usuarioView.usuarioSelecionado.matricula}"
+						maxlength="255" />
+
+					<p:outputLabel id="lblTelefone" for="inpTelefone" value="Telefone" />
+					<p:inputText id="inpTelefone"
+						value="#{usuarioView.usuarioSelecionado.telefone}" maxlength="255" />
+
+					<p:commandButton value="Limpar" resetValues="inpNome"
+						disabled="true" />
+					<p:commandButton value="Salvar" update="usuarioTable" action="#{usuarioView.salvar}" oncomplete="PF('dlgUsuario').hide();" />
+				</h:panelGrid>
+			</p:dialog>
+		</h:panelGroup>
+		<p:spacer width="100" />
+		<p:dataTable var="usuario" value="#{usuarioView.usuarios}"
+			paginator="true" rows="10"
+			paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+			rowsPerPageTemplate="5,10,15" id="usuarioTable" lazy="true">
+			<p:column headerText="Id">
+				<h:outputText value="#{usuario.id}" />
+			</p:column>
+			<p:column headerText="Nome">
+				<h:outputText value="#{usuario.nome}" />
+			</p:column>
+
+			<p:column headerText="Matricula">
+				<h:outputText value="#{usuario.matricula}" />
+			</p:column>
+
+			<p:column headerText="Telefone">
+				<h:outputText value="#{usuario.telefone}" />
+			</p:column>
+
+			<p:column headerText="Ações">
+				<p:commandButton value="Excluir" action="#{usuarioView.remove}" update=":formUsuario:usuarioTable">
+					<f:setPropertyActionListener value="#{usuario}" target="#{usuarioView.usuarioSelecionado}" />
+				</p:commandButton>
+				<p:commandButton value="Editar" update=":formUsuario:dlgUsuario" oncomplete="PF('dlgUsuario').show();">
+					<f:setPropertyActionListener value="#{usuario}" target="#{usuarioView.usuarioSelecionado}" />
+				</p:commandButton>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</h:body>
+</html>
